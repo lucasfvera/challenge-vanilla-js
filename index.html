@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="reset.css" />
+		<link rel="stylesheet" href="style.css" />
+		<title>Fake User Dashboard</title>
+	</head>
+	<body>
+		<main>
+			<h1 class="hero-header">Users List</h1>
+			<ul id="users-list" class="container"></ul>
+		</main>
+		<template id="user-entry">
+			<li class="card">
+				<img
+					src=""
+					alt=""
+					height="100"
+					width="100"
+					class="profile-picture"
+					id="user-picture"
+					loading="lazy"
+				/>
+				<div class="card__info">
+					<h2 class="header" id="user-name"></h2>
+					<h6 class="caption" id="user-email"></h6>
+				</div>
+			</li>
+		</template>
+		<script src="main.js"></script>
+	</body>
+</html>
