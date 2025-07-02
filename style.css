@@ -1,10 +1,23 @@
+* {
+	box-sizing: border-box;
+}
+
 body {
 	background-color: rgb(188, 216, 227);
 	height: 100vh;
 	font-family: Arial, Helvetica, sans-serif;
+	display: flex;
+	flex-direction: column;
+	padding: 1rem;
 }
 
-.container {
+main {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
+.list-container {
 	gap: 1rem;
 	display: flex;
 	flex-direction: column;
@@ -44,4 +57,30 @@ body {
 }
 
 .caption {
+	font-size: 1rem;
+}
+
+.pagination {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+}
+
+.navigation-buttons {
+	display: flex;
+	gap: 2rem;
+}
+
+.button-primary {
+	cursor: pointer;
+	background-color: rgb(255, 162, 86);
+	padding: 0.25rem 1rem;
+	border-radius: 100px;
+}
+
+.button-primary:disabled {
+	cursor: default;
+	background-color: rgb(189, 150, 118);
 }

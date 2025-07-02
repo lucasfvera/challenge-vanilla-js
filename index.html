@@ -10,8 +10,24 @@
 	<body>
 		<main>
 			<h1 class="hero-header">Users List</h1>
-			<ul id="users-list" class="container"></ul>
+			<ul id="users-list" class="list-container"></ul>
 		</main>
+		<footer>
+			<div class="pagination">
+				<div>
+					Page #
+					<span id="page-number"></span>
+				</div>
+				<div class="navigation-buttons">
+					<button class="button-primary" id="previous-page-btn">
+						prev
+					</button>
+					<button class="button-primary" id="next-page-btn">
+						next
+					</button>
+				</div>
+			</div>
+		</footer>
 		<template id="user-entry">
 			<li class="card">
 				<img
