@@ -103,7 +103,7 @@ function paginateData(data, elementsPerPage) {
  */
 function renderPage(page, renderFn) {
 	const pageIndicatorElement = document.getElementById('page-number');
-	if (!pageIndicatorElement) return;
+	if (!pageIndicatorElement || !page) return;
 
 	pageIndicatorElement.textContent = page.page.toString();
 	page.elements.forEach((el) => renderFn(el));
@@ -114,36 +114,25 @@ function clearPage() {
 	root.replaceChildren();
 }
 
-function addPaginationHandlers(pages) {
+function renderPaginationHandlers() {
+	const pages = usersData.retrievePages;
+	// This is for the initial render
 	const prevBtnElement = document.getElementById('previous-page-btn');
 	const nextBtnElement = document.getElementById('next-page-btn');
 	if (!prevBtnElement || !nextBtnElement) {
 		throw new Error('Something failed while attaching the handlers');
 	}
-
 	const pageNumber = getCurrentPageNumber();
+	if (pages.length === 0) {
+		//Disable both buttons
+		!prevBtnElement.hasAttribute('disabled') &&
+			toggleDisableButton(prevBtnElement);
+		!nextBtnElement.hasAttribute('disabled') &&
+			toggleDisableButton(nextBtnElement);
+		return;
+	}
 	updatePageButtonStatus(pageNumber, 0, prevBtnElement);
-	updatePageButtonStatus(pageNumber, pages.length - 1, nextBtnElement);
-
-	nextBtnElement.addEventListener('click', () => {
-		const pageNumber = getCurrentPageNumber();
-		clearPage();
-		renderPage(pages[pageNumber + 1], insertUserCardItem);
-		updatePageButtonStatus(pageNumber, 0, prevBtnElement);
-		updatePageButtonStatus(
-			pageNumber + 1,
-			pages.length - 1,
-			nextBtnElement
-		);
-	});
-
-	prevBtnElement.addEventListener('click', () => {
-		const pageNumber = getCurrentPageNumber();
-		clearPage();
-		renderPage(pages[pageNumber - 1], insertUserCardItem);
-		updatePageButtonStatus(pageNumber, pages.length - 1, nextBtnElement);
-		updatePageButtonStatus(pageNumber - 1, 0, prevBtnElement);
-	});
+	updatePageButtonStatus(pageNumber + 1, pages.length, nextBtnElement);
 }
 
 function toggleDisableButton(button) {
@@ -151,10 +140,13 @@ function toggleDisableButton(button) {
 }
 
 function updatePageButtonStatus(pageNumber, limitNumber, targetButton) {
+	const isDisabled = targetButton.hasAttribute('disabled');
 	if (pageNumber === limitNumber) {
-		toggleDisableButton(targetButton);
+		if (!isDisabled) {
+			toggleDisableButton(targetButton);
+		}
 		return true;
-	} else if (targetButton.hasAttribute('disabled')) {
+	} else if (isDisabled) {
 		toggleDisableButton(targetButton);
 		return false;
 	}
@@ -168,12 +160,117 @@ function getCurrentPageNumber() {
 	return Number(pageIndicatorElement.textContent);
 }
 
+class UserData {
+	#data;
+	#paginatedData;
+
+	/**
+	 *
+	 * @param {User[]} data
+	 */
+	constructor(data) {
+		this.#data = data;
+		this.#paginatedData = this.buildPaginatedData(data, 5);
+	}
+
+	/**
+	 * @template T
+	 * @param {T[]} data
+	 * @param {number} elementsPerPage
+	 * @returns {{page: number, elements: T[]}[]} pages
+	 */
+	buildPaginatedData(data, elementsPerPage) {
+		const pagesNumber = Math.ceil(data.length / elementsPerPage);
+
+		/**
+		 * @type {{page: number, elements: Array}[]}
+		 */
+		let pages = [];
+		for (let currentPage = 0; currentPage < pagesNumber; currentPage++) {
+			const nextPage = currentPage + 1;
+			const elements = data.slice(
+				currentPage * elementsPerPage,
+				nextPage * elementsPerPage
+			);
+			const newPage = {
+				page: currentPage,
+				elements,
+			};
+			pages.push(newPage);
+		}
+
+		return pages;
+	}
+
+	get retrievePages() {
+		return this.#paginatedData;
+	}
+
+	get retrieveData() {
+		return this.#data;
+	}
+
+	updatePaginatedData(newPaginatedData) {
+		this.#paginatedData = newPaginatedData;
+	}
+}
+
+/**
+ * @type {UserData}
+ */
+let usersData;
+
 async function main() {
 	const users = await fetchUsers();
 
-	const paginatedUsers = paginateData(users, 5);
+	usersData = new UserData(users);
+
+	const paginatedUsers = usersData.retrievePages;
 	renderPage(paginatedUsers[0], insertUserCardItem);
-	addPaginationHandlers(paginatedUsers);
+	renderPaginationHandlers();
 }
+
+document.getElementById('search-box')?.addEventListener('input', (e) => {
+	if (!e.target) return;
+	/**
+	 * @type {string}
+	 */
+	const searchTerm = e.target.value;
+	const els = usersData.retrieveData;
+	const filteredEls = els.filter((el) =>
+		el.name.first.toLowerCase().startsWith(searchTerm)
+	);
+	console.log(filteredEls, searchTerm);
+
+	const pages = usersData.buildPaginatedData(filteredEls, 5);
+	usersData.updatePaginatedData(pages);
+	clearPage();
+	renderPage(pages[0], insertUserCardItem);
+	renderPaginationHandlers();
+});
+
+document.getElementById('previous-page-btn')?.addEventListener('click', () => {
+	const prevBtnElement = document.getElementById('previous-page-btn');
+	const nextBtnElement = document.getElementById('next-page-btn');
+	const pages = usersData.retrievePages;
+	const pageNumber = getCurrentPageNumber();
+	const prevPageNumber = pageNumber - 1;
+	clearPage();
+	renderPage(pages[prevPageNumber], insertUserCardItem);
+	updatePageButtonStatus(prevPageNumber, 0, prevBtnElement);
+	updatePageButtonStatus(prevPageNumber, pages.length - 1, nextBtnElement);
+});
+
+document.getElementById('next-page-btn')?.addEventListener('click', () => {
+	const prevBtnElement = document.getElementById('previous-page-btn');
+	const nextBtnElement = document.getElementById('next-page-btn');
+	const pages = usersData.retrievePages;
+	const pageNumber = getCurrentPageNumber();
+	const nextPageNumber = pageNumber + 1;
+	clearPage();
+	renderPage(pages[nextPageNumber], insertUserCardItem);
+	updatePageButtonStatus(nextPageNumber, 0, prevBtnElement);
+	updatePageButtonStatus(nextPageNumber, pages.length - 1, nextBtnElement);
+});
 
 main();
