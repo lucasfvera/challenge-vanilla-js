@@ -222,12 +222,22 @@ let usersData;
 
 async function main() {
 	const users = await fetchUsers();
+	setLoadingCards(false);
 
 	usersData = new UserData(users);
 
 	const paginatedUsers = usersData.retrievePages;
 	renderPage(paginatedUsers[0], insertUserCardItem);
 	renderPaginationHandlers();
+}
+
+function setLoadingCards(isLoading) {
+	const loadingCards = document.querySelectorAll('.card.loading-skeleton');
+	if (isLoading) {
+		loadingCards.forEach((card) => card.classList.remove('hidden'));
+	} else {
+		loadingCards.forEach((card) => card.classList.add('hidden'));
+	}
 }
 
 document.getElementById('search-box')?.addEventListener('input', (e) => {

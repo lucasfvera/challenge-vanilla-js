@@ -21,7 +21,11 @@
 			</label>
 		</header>
 		<main>
-			<ul id="users-list" class="list-container"></ul>
+			<ul id="users-list" class="list-container">
+				<li class="card loading-skeleton"></li>
+				<li class="card loading-skeleton"></li>
+				<li class="card loading-skeleton"></li>
+			</ul>
 		</main>
 		<footer>
 			<div class="pagination">
@@ -30,10 +34,14 @@
 					<span id="page-number"></span>
 				</div>
 				<div class="navigation-buttons">
-					<button class="button-primary" id="previous-page-btn">
+					<button
+						class="button-primary"
+						id="previous-page-btn"
+						disabled
+					>
 						prev
 					</button>
-					<button class="button-primary" id="next-page-btn">
+					<button class="button-primary" id="next-page-btn" disabled>
 						next
 					</button>
 				</div>
@@ -46,7 +54,7 @@
 					alt=""
 					height="100"
 					width="100"
-					class="profile-picture"
+					class="profile-picture loading-skeleton"
 					id="user-picture"
 					loading="lazy"
 				/>

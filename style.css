@@ -40,6 +40,7 @@ header {
 	background-color: whitesmoke;
 	width: 50%;
 	max-width: 500px;
+	min-height: 132px;
 }
 
 .profile-picture {
@@ -98,4 +99,21 @@ header {
 	padding: 0.25rem 0.25rem 0.25rem 0.5rem;
 	border-radius: 100px;
 	margin-left: 0.5rem;
+}
+
+.loading-skeleton {
+	animation: loading 1s linear infinite alternate;
+}
+
+@keyframes loading {
+	0% {
+		background-color: hsl(200, 30%, 70%);
+	}
+	100% {
+		background-color: hsl(200, 30%, 95%);
+	}
+}
+
+.hidden {
+	display: none;
 }
