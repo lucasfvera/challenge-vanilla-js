@@ -41,6 +41,7 @@ header {
 	width: 50%;
 	max-width: 500px;
 	min-height: 132px;
+	justify-content: space-between;
 }
 
 .profile-picture {
@@ -90,6 +91,10 @@ header {
 .button-primary:disabled {
 	cursor: default;
 	background-color: rgb(189, 150, 118);
+}
+
+.button-primary:hover {
+	background-color: rgb(254, 197, 151);
 }
 
 .input {
