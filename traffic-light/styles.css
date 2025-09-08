@@ -1,0 +1,53 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+    align-content: center;
+    background-color: #60cdf4;
+}
+
+#traffic-light {
+    margin: auto;
+    width: 400px;
+    height: 400px;
+    position: relative;
+    background-image: url("./assets/image.png");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#red,
+#yellow,
+#green {
+    position: absolute;
+    left: 50%;
+    border-radius: 100%;
+    width: 80px;
+    height: 80px;
+}
+#red {
+    top: 129px;
+    transform: translateX(-50%) translateY(-50%);
+}
+#yellow {
+    top: 217px;
+    transform: translateX(-50%) translateY(-50%);
+}
+#green {
+    top: 76%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.active {
+    background-color: transparent;
+}
+
+.hidden {
+    background-color: black;
+}

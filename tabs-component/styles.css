@@ -1,0 +1,18 @@
+body {
+    font-family: sans-serif;
+}
+
+.tab {
+}
+
+.tab__content {
+    display: none;
+}
+
+.active {
+    display: block;
+}
+
+.tab__active {
+    border: 2px solid rgb(130, 101, 211);
+}
