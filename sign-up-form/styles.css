@@ -1,0 +1,23 @@
+html {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    gap: 1rem;
+}
+
+.form__field {
+    display: flex;
+    flex-direction: column;
+}
+
+.has-error {
+    border: 1px solid red;
+}
+
+.has-error:focus {
+    outline: 2px solid red;
+}
